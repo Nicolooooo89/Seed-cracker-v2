@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.manus.seedcracker.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ClientLevelMixin",
+    "ClientPacketListenerMixin",
+    "LocalPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

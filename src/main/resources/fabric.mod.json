@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "seedcrackerkiller",
+	"version": "${version}",
+	"name": "SeedCrackerKiller",
+	"description": "Advanced Structure Detection and Seed Cracking Framework for 1.21.11",
+	"authors": [
+		"Manus"
+	],
+	"contact": {
+		"homepage": "https://manus.im"
+	},
+	"license": "MIT",
+	"icon": "assets/seedcrackerkiller/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"me.manus.seedcracker.SeedCracker"
+		]
+	},
+	"accessWidener": "seedcrackerkiller.aw",
+	"mixins": [
+		"seedcrackerkiller.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~1.21.11",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

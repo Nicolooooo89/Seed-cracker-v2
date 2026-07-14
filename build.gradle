@@ -1,0 +1,95 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+	mavenCentral()
+	maven { url "https://maven.fabricmc.net/" }
+	maven { url "https://maven.terraformersmc.com/releases" }
+	maven { url "https://maven.shedaniel.me/" }
+	maven { url "https://maven.latticg.com/" }
+	maven { url "https://maven.seedfinding.com/" }
+	maven { url "https://maven-snapshots.seedfinding.com/" }
+	maven { url "https://jitpack.io" }
+}
+
+loom {
+	// splitEnvironmentSourceSets()
+	accessWidenerPath = file("src/main/resources/seedcrackerkiller.aw")
+
+mods {
+			"seedcrackerkiller" {
+				sourceSet sourceSets.main
+			}
+		}
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	include implementation("com.seedfinding:mc_math:851e9d0577dfdca50154e98f1d334bd31c641326") { transitive = false }
+	include implementation("com.seedfinding:mc_seed:55f6242001f7eb4226df4ed0d023f1838a54a99d") { transitive = false }
+	include implementation("com.seedfinding:mc_core:eee662999e9f3fe037476b6940dbd6d5e23cdbb6") { transitive = false }
+	include implementation("com.seedfinding:mc_noise:dbab3996ea3abff5dd420db53c31d5498afd2fe5") { transitive = false }
+	include implementation("com.seedfinding:mc_biome:17af8cb1110fdc983b7cb2b887d1fb2060e23ee3") { transitive = false }
+	include implementation("com.seedfinding:mc_terrain:a03e440ec5b282e399382f2cc5ad0db91b438d2e") { transitive = false }
+	include implementation("com.seedfinding:mc_feature:755d3611ac1c499c28289ccca5b738af6a5859b7") { transitive = false }
+	include implementation("com.seedfinding:mc_reversal:75aa6ce47a9f53a1aa212765e9830e08f6c86299") { transitive = false }
+	include implementation("com.seedfinding:latticg:1.07")
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
+}
